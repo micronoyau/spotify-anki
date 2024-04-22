@@ -11,10 +11,7 @@ import { spotifyAPILoader } from './lib/spotify-api';
 import { quizLoader, QuizPage } from './routes/game/quiz-page';
 import { studyLoader, StudyPage } from './routes/game/study-page';
 import { progressionLoader, ProgressionPage } from './routes/game/progression-page';
-import { requestsLoader, RequestsPage } from './routes/admin/requests-page';
 import { LoginPage } from './routes/login-page';
-import { analyseLoader, AnalysePage } from './routes/admin/analyse-page';
-import { adminSecureLoader } from './lib/backend-api';
 import { hardcoreLoader, HardcorePage } from './routes/game/hardcore-page';
 
 const root = ReactDOM.createRoot(
@@ -37,22 +34,6 @@ const router = createBrowserRouter([
           {
             path: "/login",
             element: <LoginPage />,
-          },
-          {
-            loader: adminSecureLoader,
-            errorElement: <APIErrorPage />,
-            children: [
-              {
-                path: "/analyse/:playlist_id",
-                element: <AnalysePage />,
-                loader: analyseLoader,
-              },
-              {
-                path: "/requests",
-                element: <RequestsPage />,
-                loader: requestsLoader,
-              }
-            ],
           },
           {
             path: "/home",

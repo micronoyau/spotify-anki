@@ -6,7 +6,6 @@ export const HOME_URL = FRONT_URL + 'home';
 export const REDIRECT_URI = BACK_URL + 'callback'; // Your redirect uri
 
 export const STATEKEY = 'spotify_auth_state';
-export const ADMIN_COOKIE = 'admin_token';
 export const USER_COOKIE = 'user_token';
 
 export const DB_HOST = process.env.DB_HOST ?? '';
@@ -16,7 +15,6 @@ export const DB_PASSWORD = process.env.MYSQL_ROOT_PASSWORD ?? '';
 
 export const CLIENT_ID = process.env.CLIENT_ID || '';
 export const CLIENT_SECRET = process.env.CLIENT_SECRET || '';
-export const ADMIN_PASSWD = process.env.ADMIN_PASSWD;
 
 export const UPDATE_OK = { update: "ok" };
 

@@ -3,8 +3,6 @@ import { Model, ModelStatic, Sequelize } from "sequelize";
 import { UserModel } from "../models/user";
 import { ProgressionModel } from "../models/progression";
 import { DB_HOST, DB_PASSWORD, DB_PORT } from "../consts";
-import { RequestModel } from "../models/request";
-
 
 export class Database {
   static User: ModelStatic<Model<any, any>>;
@@ -51,7 +49,6 @@ export function setupDB() {
   // Synchronize models with database (possibly creating tables)
   Database.User = UserModel(sequelize);
   Database.Progression = ProgressionModel(sequelize);
-  Database.UserRequest = RequestModel(sequelize);
   Database.sequelize = sequelize;
   sequelize.sync();
 }

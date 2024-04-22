@@ -1,5 +1,4 @@
-import { ADMIN_TOKEN_COOKIE, BACK_URL, ERROR_NOT_ADMIN, ERROR_UNEXPECTED_BACKEND_ERROR } from "./consts";
-import { getCookie } from "./cookie";
+import { BACK_URL, ERROR_UNEXPECTED_BACKEND_ERROR } from "./consts";
 
 async function requestAPI(url: string, options: RequestInit | undefined = undefined) {
   const response = await fetch(BACK_URL + url, options);
@@ -56,13 +55,6 @@ export async function resetProgression(user_id: string, playlist_id: string) {
 }
 
 /**
- * Request admin local login
- */
-export function adminLogin(password: string) {
-  return requestAPI("locallogin?password=" + password);
-}
-
-/**
  * Request user local login
  */
 export function userLogin() {
@@ -74,65 +66,6 @@ export function userLogin() {
  */
 export async function submitRequest(id: string) {
   return requestAPI('reqstore?playlist_id=' + id)
-}
-
-/**
- * Fetch all requests from backend
- */
-export async function fetchRequests() {
-  return requestAPI('reqfetch', {
-    headers: {
-      'Authorization': 'Bearer ' + getCookie(ADMIN_TOKEN_COOKIE)
-    }
-  })
-}
-
-/**
- * Delete request from backend
- */
-export async function deleteRequest(playlist_id: string) {
-  return requestAPI('reqdelete?playlist_id=' + playlist_id, {
-    headers: {
-      'Authorization': 'Bearer ' + getCookie(ADMIN_TOKEN_COOKIE)
-    }
-  })
-}
-/**
- * Delete and extra audio file
- */
-export async function deleteExtra(track: string) {
-  return requestAPI('upload/delete/' + track,
-    {
-      method: "DELETE",
-      headers: {
-        'Authorization': 'Bearer ' + getCookie(ADMIN_TOKEN_COOKIE)
-      }
-    });
-}
-
-/**
- * Upload audio file
- */
-export function uploadAudioFiles(formData: FormData) {
-  return requestAPI("upload", {
-    method: "POST",
-    headers: {
-      'Authorization': 'Bearer ' + getCookie(ADMIN_TOKEN_COOKIE)
-    },
-    body: formData
-  });
-}
-
-/**
- * Loader to ensure the user has a admin token
- */
-export function adminSecureLoader() {
-  console.log('API Loading...');
-  const token = getCookie(ADMIN_TOKEN_COOKIE);
-  if (!token) {
-    throw new Error(ERROR_NOT_ADMIN);
-  }
-  return null;
 }
 
 /**
