@@ -1,7 +1,6 @@
 import { SimplifiedPlaylist, Track, PublicUser, Paging, PlaylistTrack } from "spotify-types";
 import { getToken, refreshToken } from "./auth";
-import { getExtraPreviewUrls } from "./backend-api";
-import { BACK_URL, ERROR_NOT_LOGGED_IN, SPOTIFY_URL } from "./consts";
+import { ERROR_NOT_LOGGED_IN, SPOTIFY_URL } from "./consts";
 
 const DEFAULT_HEADER = (access_token: string) => {
   return {
@@ -63,16 +62,7 @@ export async function getPlaylistItems(playlist_id: string): Promise<Track[]> {
     return tracks.concat(...datas.map(data => data.items.map(elem => elem.track as Track)))
   };
 
-  const tracks = await getAllTracks();
-  const res = await getExtraPreviewUrls(tracks.map(track => track.id))
-  tracks.map(track => {
-    const idx = res.findIndex(id => track.id === id);
-    if (idx !== -1) {
-      track.preview_url = BACK_URL + 'audio/' + res[idx];
-    }
-    return track;
-  });
-  return tracks;
+  return await getAllTracks();
 }
 
 export async function getPlaylist(playlist_id: string): Promise<SimplifiedPlaylist> {

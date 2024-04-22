@@ -14,19 +14,6 @@ async function requestAPI(url: string, options: RequestInit | undefined = undefi
 }
 
 /**
- * Fetches extra url for songs where preview_url is missing
- */
-export async function getExtraPreviewUrls(track_ids: string[]): Promise<string[]> {
-  return requestAPI("get_extra_urls", {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: "tracks=" + track_ids.join(','),
-  });
-}
-
-/**
  * Fetches songs to study and all previously encountered songs in database
  */
 export async function getStudySongs(user_id: string, playlist_id: string): Promise<{ toStudy: string[], studied: string[] }> {
