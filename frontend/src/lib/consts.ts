@@ -1,7 +1,8 @@
 export const SPOTIFY_URL = 'https://api.spotify.com/v1/';
 export const WEB_SPOTIFY_URL = 'https://api.spotify.com/v1/';
-export const FRONT_URL = 'http://localhost:3000/'
-export const BACK_URL = 'http://localhost:4000/'
+
+export const FRONT_URL = process.env.REACT_APP_FRONT_URL ?? '';
+export const BACK_URL = process.env.REACT_APP_BACK_URL ?? '';
 
 export const HOME_URL = '/'
 export const STUDY_URL = (playlist_id: string) => '/study/' + playlist_id;

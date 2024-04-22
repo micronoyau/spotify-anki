@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
-export const FRONT_URL = 'http://localhost:3000/';
-export const BACK_URL = 'http://localhost:4000/';
+export const FRONT_URL = process.env.FRONT_URL ?? '';
+export const BACK_URL = process.env.BACK_URL ?? '';
 export const HOME_URL = FRONT_URL + 'home';
 export const REDIRECT_URI = BACK_URL + 'callback'; // Your redirect uri
 

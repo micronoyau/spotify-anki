@@ -9,6 +9,7 @@ import LoginIcon from '@mui/icons-material/Login';
 export function Root() {
   const navigation = useNavigation()
   const loggedIn = getToken() !== undefined;
+  console.log(process.env);
   return (
     <>
       <header className={'header' + (navigation.state === 'loading' ? ' loading' : '')}>
