@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Slider } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { getUserProgression, resetProgression } from "../../lib/backend-api";
@@ -7,18 +7,22 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import './progression-page.scss';
 import { PROGRESSION_URL, STUDY_URL } from "../../lib/consts";
+import { useState } from "react";
+
+const DEFAULT_INTERVAL = 5;
 
 export async function progressionLoader({ params: { playlist_id } }: any) {
   const userId = (await getUserData()).id;
   console.log('Loading progression for user ID = ', userId);
   const { registeredSongs, lastUpdate, averageEf, toStudy } = (await getUserProgression(userId, playlist_id));
   const playlistSize = (await getPlaylistItems(playlist_id)).length;
-  return { userId, playlist_id, registeredSongs, lastUpdate, averageEf, toStudy, playlistSize };
+  return { userId, playlist_id, registeredSongs, lastUpdate, toStudy, playlistSize };
 }
 
 export function ProgressionPage() {
   const loaderData = useLoaderData() as Awaited<ReturnType<typeof progressionLoader>>;
   const navigate = useNavigate();
+  const [repInterval, setRepInterval] = useState(DEFAULT_INTERVAL);
 
   const onDelete = () => {
     resetProgression(loaderData.userId, loaderData.playlist_id);
@@ -63,14 +67,20 @@ export function ProgressionPage() {
         />
         : <h2>New study</h2>}
       <p>Studied songs : {loaderData.registeredSongs} / {loaderData.playlistSize} </p>
-      <p>Average easiness factor : {loaderData.averageEf ? loaderData.averageEf.toFixed(2) : "-"}</p>
       <p>Last update : {loaderData.lastUpdate}</p>
+      <p>Repetition interval : {repInterval} min</p>
+      <Slider aria-label="Repetition interval"
+        step={5}
+        onChange={(_, value, __) => setRepInterval(value as number)}
+        defaultValue={DEFAULT_INTERVAL}
+        min={5}
+        max={60} />
     </div>
     <div className="progression-action">
       <Button
         aria-label="Play"
         variant="contained"
-        onClick={() => navigate(STUDY_URL(loaderData.playlist_id))}
+        onClick={() => navigate(STUDY_URL(loaderData.playlist_id, repInterval))}
       >
         <PlayArrowIcon />
       </Button>

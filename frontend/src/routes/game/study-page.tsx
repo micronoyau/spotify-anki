@@ -11,15 +11,15 @@ import './study-page.scss';
 
 const REFRESH_DELAY = 10000; // Refresh period for toStudy songs in ms
 
-async function getStudyTracks(userId: string, playlistId: string, tracks: Track[]) {
-  const { toStudy: toStudy_, studied } = (await getStudySongs(userId, playlistId));
+async function getStudyTracks(userId: string, playlistId: string, tracks: Track[], rep_interval: number) {
+  const { toStudy: toStudy_, studied } = (await getStudySongs(userId, playlistId, rep_interval));
   const toStudy = tracks.filter(t => t.preview_url && toStudy_.includes(t.id));
   const newTracks = tracks.filter(t => t.preview_url && !studied.includes(t.id));
   return { toStudy, newTracks };
 }
 
-export async function studyLoader({ params: { playlist_id } }: any) {
-  console.log('Loading study mode with playlist_id = ', playlist_id);
+export async function studyLoader({ params: { playlist_id, rep_interval } }: any) {
+  console.log(`Loading study mode with playlist_id = ${playlist_id} and rep_interval = ${rep_interval}`);
 
   const playlistId = (playlist_id || "") as string;
   const userId = (await getUserData()).id;
@@ -28,9 +28,9 @@ export async function studyLoader({ params: { playlist_id } }: any) {
   if (!tracks)
     throw new Error(ERROR_EMPTY_PLAYLIST);
 
-  const { toStudy, newTracks } = await getStudyTracks(userId, playlistId, tracks);
+  const { toStudy, newTracks } = await getStudyTracks(userId, playlistId, tracks, rep_interval);
 
-  return { userId, playlistId, tracks, toStudy, newTracks };
+  return { userId, playlistId, tracks, toStudy, newTracks, rep_interval };
 }
 
 export function StudyPage() {
@@ -66,7 +66,12 @@ export function StudyPage() {
   // Regularly refresh songs to study
   useEffect(() => {
     const interval = setInterval(async () => {
-      const { toStudy: updatedToStudy, newTracks: updatedNewTracks } = await getStudyTracks(loaderData.userId, loaderData.playlistId, loaderData.tracks);
+      const { toStudy: updatedToStudy, newTracks: updatedNewTracks } = await getStudyTracks(
+        loaderData.userId,
+        loaderData.playlistId,
+        loaderData.tracks,
+        loaderData.rep_interval
+      );
       setToStudy(updatedToStudy);
       setNewTracks(updatedNewTracks);
     }, REFRESH_DELAY);

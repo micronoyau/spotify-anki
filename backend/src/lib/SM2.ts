@@ -9,7 +9,7 @@ export const INITIAL_REPETITIONS = 0;
 export const INITIAL_EF = 2.5;
 export const INITIAL_INTERVAL = 1;
 
-export const INTERVAL_DURATION = 5; // In seconds
+// export const INTERVAL_DURATION = 5; // In seconds
 
 export type SM2State = {
   repetitions: number,
@@ -37,7 +37,6 @@ export function updateSM2(quality: number, repetitions: number, ef: number, inte
         return 5;
     }
   })();
-  console.log("Quality bis", quality_bis);
   return updateSM2Core(quality_bis, repetitions, ef, interval);
 }
 
@@ -52,7 +51,6 @@ export function updateSM2(quality: number, repetitions: number, ef: number, inte
  */
 function updateSM2Core(quality: number, repetitions: number, ef: number, interval: number): SM2State {
   let ret: SM2State = { repetitions, ef, interval };
-  console.log("From ", ret);
 
   // Correct response
   if (quality >= 3) {
@@ -61,7 +59,6 @@ function updateSM2Core(quality: number, repetitions: number, ef: number, interva
     } else if (repetitions === 1) {
       ret.interval = 6;
     } else {
-      console.log("qefleqjflqkjflqkejflqkefjqlekfjqelkfjqelkfjqelkfjeqlfkjqlfkjelfkjqlfkjqelfkjqelkfjqf");
       ret.interval = Math.ceil(interval * ef);
     }
     ret.repetitions += 1;
@@ -73,6 +70,5 @@ function updateSM2Core(quality: number, repetitions: number, ef: number, interva
     ret.interval = 1;
   }
 
-  console.log("To ", ret);
   return ret;
 }

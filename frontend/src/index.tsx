@@ -46,7 +46,7 @@ const router = createBrowserRouter([
             element: <ProgressionPage />,
           },
           {
-            path: "/study/:playlist_id",
+            path: "/study/:playlist_id/:rep_interval",
             loader: studyLoader,
             element: <StudyPage />,
           },

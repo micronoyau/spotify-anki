@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { Model, QueryTypes } from "sequelize";
 import { UPDATE_OK } from "../consts";
-import { INITIAL_EF, INITIAL_INTERVAL, INITIAL_REPETITIONS, INTERVAL_DURATION, updateSM2 } from "../lib/SM2";
+import { INITIAL_EF, INITIAL_INTERVAL, INITIAL_REPETITIONS, updateSM2 } from "../lib/SM2";
 import { Database } from "./setup";
 
 /**
  * Returns all studied (registered) songs so far + songs to study
  */
-export async function dbGetStudySongs(req: Request<{ user_id: string, playlist_id: string }>, res: Response) {
+export async function dbGetStudySongs(req: Request<{ user_id: string, playlist_id: string, rep_interval: number }>, res: Response) {
   const toStudy = await Database.sequelize.query(`SELECT song FROM Progressions
-                                            WHERE UNIX_TIMESTAMP(updatedAt) + \`interval\` * :interval_duration < UNIX_TIMESTAMP(CURTIME())
+                                            WHERE UNIX_TIMESTAMP(updatedAt) + \`interval\` * :rep_interval < UNIX_TIMESTAMP(CURTIME())
                                             AND user = :user_id
                                             AND playlist = :playlist_id;`,
     {
@@ -17,7 +17,7 @@ export async function dbGetStudySongs(req: Request<{ user_id: string, playlist_i
       replacements: {
         user_id: req.params.user_id,
         playlist_id: req.params.playlist_id,
-        interval_duration: INTERVAL_DURATION
+        rep_interval: req.params.rep_interval * 60
       }
     }
   ) as { song: string }[];
@@ -81,7 +81,7 @@ export async function dbUpdateStudySong(req: Request<{ user_id: string, playlist
 /**
  * Get user progression : number of studied songs, last update and average progression
  */
-export async function dbGetUserProgression(req: Request<{ user_id: string, playlist_id: string }>, res: Response) {
+export async function dbGetUserProgression(req: Request<{ user_id: string, playlist_id: string, rep_interval: number }>, res: Response) {
   const registeredSongs = await Database.Progression.count({
     where: {
       user: req.params.user_id,
@@ -105,7 +105,7 @@ export async function dbGetUserProgression(req: Request<{ user_id: string, playl
   }) / registeredSongs;
 
   const { toStudy } = (await Database.sequelize.query(`SELECT COUNT(song) as toStudy FROM Progressions
-                                            WHERE UNIX_TIMESTAMP(updatedAt) + \`interval\` * :interval_duration < UNIX_TIMESTAMP(CURTIME())
+                                            WHERE UNIX_TIMESTAMP(updatedAt) + \`interval\` * :rep_interval < UNIX_TIMESTAMP(CURTIME())
                                             AND user = :user_id
                                             AND playlist = :playlist_id;`,
     {
@@ -113,7 +113,7 @@ export async function dbGetUserProgression(req: Request<{ user_id: string, playl
       replacements: {
         user_id: req.params.user_id,
         playlist_id: req.params.playlist_id,
-        interval_duration: INTERVAL_DURATION
+        rep_interval: req.params.rep_interval * 60
       }
     }
   ))[0] as { toStudy: number };

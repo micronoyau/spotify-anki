@@ -33,9 +33,9 @@ app.get('/refresh_token', oauthRefreshToken)
 // app.get('/user/:user_id', dbGetUserData);
 
 // Study db interactions
-app.get('/get_study_songs/:user_id/:playlist_id', dbGetStudySongs);
+app.get('/get_study_songs/:user_id/:playlist_id/:rep_interval', dbGetStudySongs);
 app.get('/update_study_song/:user_id/:playlist_id/:song_id/:quality', dbUpdateStudySong);
-app.get('/progression/:user_id/:playlist_id', dbGetUserProgression);
+app.get('/progression/:user_id/:playlist_id/:rep_interval', dbGetUserProgression);
 app.get('/reset_progression/:user_id/:playlist_id', dbResetPlaylistProgression);
 
 app.listen(4000, () => {

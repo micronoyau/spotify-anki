@@ -5,7 +5,7 @@ export const FRONT_URL = process.env.REACT_APP_FRONT_URL ?? '';
 export const BACK_URL = process.env.REACT_APP_BACK_URL ?? '';
 
 export const HOME_URL = '/'
-export const STUDY_URL = (playlist_id: string) => '/study/' + playlist_id;
+export const STUDY_URL = (playlist_id: string, rep_interval: number) => '/study/' + playlist_id + '/' + rep_interval;
 export const PROGRESSION_URL = (playlist_id: string) => '/progression/' + playlist_id;
 export const QUIZ_URL = (playlist_id: string) => '/quiz/' + playlist_id;
 export const HARDCORE_URL = (playlist_id: string) => '/hardcore/' + playlist_id

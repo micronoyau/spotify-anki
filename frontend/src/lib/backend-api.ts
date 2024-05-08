@@ -16,8 +16,8 @@ async function requestAPI(url: string, options: RequestInit | undefined = undefi
 /**
  * Fetches songs to study and all previously encountered songs in database
  */
-export async function getStudySongs(user_id: string, playlist_id: string): Promise<{ toStudy: string[], studied: string[] }> {
-  return requestAPI(`get_study_songs/${user_id}/${playlist_id}`);
+export async function getStudySongs(user_id: string, playlist_id: string, rep_interval: number): Promise<{ toStudy: string[], studied: string[] }> {
+  return requestAPI(`get_study_songs/${user_id}/${playlist_id}/${rep_interval}`);
 }
 
 /**
@@ -31,7 +31,7 @@ export async function updateStudySong(user_id: string, playlist_id: string, song
  * Request backend to delete progression
  */
 export async function getUserProgression(user_id: string, playlist_id: string) {
-  return requestAPI(`progression/${user_id}/${playlist_id}`);
+  return requestAPI(`progression/${user_id}/${playlist_id}/5`);
 }
 
 /**
