@@ -10,7 +10,7 @@ enum PlayingState {
   Paused = 'paused',
 }
 
-export function Player({ preview_url, id, volume }: { preview_url: string, id?: string, volume?: number }) {
+export function Player({ preview_url, id, volume, callback }: { preview_url: string, id?: string, volume?: number, callback?: (playing: boolean) => void }) {
   const [playingState, setPlayingState] = useState(PlayingState.Init);
   const [audio] = useState(new Audio());
 
@@ -42,6 +42,7 @@ export function Player({ preview_url, id, volume }: { preview_url: string, id?: 
   }, [audio])
 
   const handleAudio = () => {
+    callback && callback(playingState === PlayingState.Paused || playingState === PlayingState.Init);
     if (playingState === PlayingState.Started) {
       setPlayingState(PlayingState.Paused);
       audio.pause();
@@ -49,7 +50,6 @@ export function Player({ preview_url, id, volume }: { preview_url: string, id?: 
       setPlayingState(PlayingState.Started);
       audio.play();
     }
-
   };
 
   return (

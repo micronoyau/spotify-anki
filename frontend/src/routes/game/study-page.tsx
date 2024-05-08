@@ -1,6 +1,6 @@
 import { useLoaderData } from 'react-router-dom';
 import { ERROR_EMPTY_PLAYLIST } from '../../lib/consts';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getPlaylistItems, getUserData } from '../../lib/spotify-api';
 import { randomChoice } from '../../lib/random';
 import { Player } from '../../components';
@@ -39,6 +39,7 @@ export function StudyPage() {
   const [toStudy, setToStudy] = useState(loaderData.toStudy);
   const [selectedTrack, setSelectedTrack] = useState<Track>();
   const [flipped, setFlipped] = useState(false);
+  const [playingStarted, setPlayingStarted] = useState(false);
 
   /**
    * Select a random track by taking care of removing
@@ -73,6 +74,11 @@ export function StudyPage() {
     return () => clearInterval(interval);
   }, [toStudy])
 
+  // Ensure that the flashcard can be flipped iff the music is started
+  const flashcardClicked = useCallback(() => {
+    playingStarted && setFlipped(true);
+  }, [playingStarted]);
+
   if (!selectedTrack) {
     // Ensure that a new track gets selected if there is a song to select
     if (newTracks.length || toStudy.length)
@@ -91,10 +97,14 @@ export function StudyPage() {
     setFlipped(false);
   }
 
+  const playerClicked = (playing: boolean) => {
+    setPlayingStarted(playing || playingStarted);
+  };
+
   return (
     <div className="study-page">
-      <Player preview_url={selectedTrack.preview_url} />
-      <FlashCard callback={submitLevel} onClick={() => setFlipped(true)} description={selectedTrack.artists.map(a => a.name).join(',') + ' - ' + selectedTrack.name} flipped={flipped} />
+      <Player callback={playerClicked} preview_url={selectedTrack.preview_url} />
+      <FlashCard callback={submitLevel} onClick={flashcardClicked} description={selectedTrack.artists.map(a => a.name).join(',') + ' - ' + selectedTrack.name} flipped={flipped} />
     </div>
   );
 }
