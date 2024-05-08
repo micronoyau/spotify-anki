@@ -39,15 +39,14 @@ export function Root() {
         </div>
       </header>
       <div className="root-container">
-        <div className="page-container">
-          <Outlet />
-        </div>
-        <div className="area" >
+        <div className="background" >
           <ul className="circles">
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(idx => <li key={idx}></li>)}
           </ul>
         </div >
-
+        <div className="page-container">
+          <Outlet />
+        </div>
       </div>
     </>);
 };
