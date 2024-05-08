@@ -11,6 +11,7 @@ export function setToken(token: string) {
 }
 
 export function login() {
+  console.log("login to ", BACK_URL);
   window.location.href = BACK_URL + 'login';
 }
 

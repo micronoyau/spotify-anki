@@ -1,15 +1,18 @@
 version: "3.8"
+
 services:
+
   frontend-prod:
     build:
       context: ./frontend
+      args:
+        - REACT_APP_FRONT_URL=${FRONT_URL}
+        - REACT_APP_BACK_URL=${BACK_URL}
       dockerfile: prod.Dockerfile
     container_name: frontend-prod
     expose:
       - '3000'
-    environment:
-      - REACT_APP_FRONT_URL=${FRONT_URL}
-      - REACT_APP_BACK_URL=${BACK_URL}
+
   db-prod:
     image: mysql:latest
     container_name: db-prod
@@ -21,6 +24,7 @@ services:
       - '3306'
     volumes:
       - db-prod-volume:/var/lib/mysql
+
   backend-prod:
     depends_on:
       - db-prod
@@ -35,6 +39,7 @@ services:
       - '4000'
     stdin_open: true
     tty: true
+
   nginx-prod:
     build: ./nginx
     container_name: nginx-prod
