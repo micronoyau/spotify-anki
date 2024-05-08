@@ -94,7 +94,7 @@ export function StudyPage() {
   return (
     <div className="study-page">
       <Player preview_url={selectedTrack.preview_url} />
-      <FlashCard callback={submitLevel} onClick={() => setFlipped(true)} description={selectedTrack.name} flipped={flipped} />
+      <FlashCard callback={submitLevel} onClick={() => setFlipped(true)} description={selectedTrack.artists.map(a => a.name).join(',') + ' - ' + selectedTrack.name} flipped={flipped} />
     </div>
   );
 }
