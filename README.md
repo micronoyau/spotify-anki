@@ -1,33 +1,43 @@
-# Web App project
+# Spotanki
 
-## Local run
+## Improve your music quizz skills !
 
-Simply run:
+**Spotanki** is the natural combination of Spotify and Anki. Take advantage of anki's repetition-based teaching strategy to sharpen your ability to recognize songs.
+
+### Usage
+
+Simply connect to your Spotify account, select a playlist and you're ready to enjoy 3 modes :
+ + Study : anki-based learning method using flashcards
+ + Quizz : select the right answer among 4 choices
+ + Hardcore : 3 songs are playing at the same time. Will you be able to recognize them ?
+
+### Setup
+
+#### Requirements
+
++ docker (tested on version 26.1.2)
++ docker-compose (tested on version 1.29.2)
++ node (tested on version 18.19.0)
++ A Spotify app (see spotify developer https://developer.spotify.com/documentation/web-api)
+
+#### Configuration
+
+You need to provide a `.env` file in `/backend` that contains the credentials of your Spotify app. A sample template file is provided.
+
+#### Development mode
+
+You can either run your the locally or deploy it. If you'd like to tweak some settings, feel free to use the development mode 
+
 ```
 npm run dev
 ```
 
-The website is available at http://localhost:3000.
+The development version will be served locally at http://localhost:3000.
 
+#### Production build
 
-## Dev on docker
-
-`npm run dev`
-
-## Dev locally
+To run the production build, first fill a `.env.prod` file at the root of the project that contains the URL of the backend and the frontend. A template file is provided. Then run
 
 ```
-cd frontend
-npm start
+npm run prod
 ```
-
-and
-
-```
-cd backend
-node index.js
-```
-
-## Objectifs
-
-Quizz adaptatif : cette application web permet à un enseignant de concevoir des quizz adaptatifs sur un sujet donné, les questions présentées aux étudiants pouvant évoluer en fonction des réponses données (soit pour s'adapter à un niveau identifié, soit pour suivre un scénario arborescent, soit pour d'autres raisons). L'application doit évidemment permettre aux étudiants d'y répondre, et d'y recevoir une évaluation sous la forme d'une note générée automatiquement (sur la base d'un barème tenant compte du caractère adaptatif du test), afin de s'assurer que l'enseignant ne perdra pas une seule seconde à corriger inutilement des copies (tout en garantissant un faible risque de recours de la part des étudiants, donc une satisfaction accrue du service juridique de l'établissement et une progression de carrière fulgurante pour l'enseignant).
